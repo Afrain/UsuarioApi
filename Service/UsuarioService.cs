@@ -11,11 +11,13 @@ namespace UsuarioApi.Service
 
         private IMapper _mapper;
         private UserManager<Usuario> _userManager;
+        private SignInManager<Usuario> _signInManager;
 
-        public UsuarioService(IMapper mapper, UserManager<Usuario> userManager)
+        public UsuarioService(IMapper mapper, UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
         {
             _mapper = mapper;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public async Task Cadastrar(CreateUsuarioDto createUsuarioDto)
@@ -40,6 +42,17 @@ namespace UsuarioApi.Service
                 }
 
             }
+        }
+
+        public async Task Login(LoginUsuarioDto loginUsuarioDto)
+        {
+            var resultado = await _signInManager.PasswordSignInAsync(loginUsuarioDto.UserName, loginUsuarioDto.Password, false, false);
+
+            if (!resultado.Succeeded)
+                throw new ApplicationException("Usuário não autenticado!");
+            
+
+
         }
     }
 }

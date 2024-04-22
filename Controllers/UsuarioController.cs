@@ -16,10 +16,17 @@ public class UsuarioController : ControllerBase
         _usuarioService = usuarioService;
     }
 
-    [HttpPost]
+    [HttpPost("cadastro")]
     public async Task<IActionResult> CadastraUsuario(CreateUsuarioDto createUsuarioDto)
     {
         await _usuarioService.Cadastrar(createUsuarioDto);
         return Ok("Usuário cadastrado com sucesso!");
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LogarUsuarioAsync(LoginUsuarioDto loginUsuarioDto)
+    {
+        await _usuarioService.Login(loginUsuarioDto);
+        return Ok("Usuário autenticado!");
     }
 }
