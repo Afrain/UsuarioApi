@@ -8,13 +8,14 @@ using UsuarioApi.Models;
 using UsuarioApi.Service;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 //Url banco de dados
-var stringConexao = builder.Configuration.GetConnectionString("UsuarioApiConnection");
+var stringConexao = builder.Configuration["ConnectionStrings:UsuarioApiConnection"];
 
 // Conexão com banco de dados
 builder.Services.AddDbContext<UsuarioDbContext>( opts => opts.UseSqlServer(stringConexao));
@@ -39,7 +40,7 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("493u43fjef3p984j3pfoej3984j938jewwj")),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SymmetricSecurityKey"])),
         ValidateAudience = false,
         ValidateIssuer = false,
         ClockSkew = TimeSpan.Zero
